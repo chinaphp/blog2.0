@@ -1,7 +1,6 @@
 <?php
 use \yii\helpers\Html;
-
-use app\widgets\LinkPager;
+use \yii\widgets\LinkPager;
 
 use app\models\Lookup;
 
@@ -42,10 +41,10 @@ $this->registerJs($deleteJS);
 		<td><?php echo date("Y/m/d", $model->create_time);?></td>
 		<td>
 			<?php
-				echo Html::a("Update", array("update", "id"=>$model->id)); 
+				echo Html::a(NULL, array("update", "id"=>$model->id), array('class' => 'icon icon-edit')); 
 			?> |
 			<?php
-				echo Html::a("Delete", array("delete", "id"=>$model->id), array('class'=>'delete'));
+				echo Html::a(NULL, array("delete", "id"=>$model->id), array('class'=>'delete icon icon-trash'));
 			?>
 		<td>
 	</tr>
@@ -61,9 +60,7 @@ $this->registerJs($deleteJS);
 	}
 	?>
 </table>
-<div class='pagination'>
 <?php
-$this->widget(LinkPager::className(), array('pages'=>$pages, 'header'=>''));
+echo LinkPager::widget(array('pagination'=>$pagination));
 ?>
-</div>
 

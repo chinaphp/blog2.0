@@ -1,4 +1,5 @@
 <?php
+namespace app\controllers;
 use \Yii;
 use \yii\web\Controller;
 
@@ -34,12 +35,14 @@ class SiteController extends Controller
 	 */
 	public function actionError()
 	{
-	    if($error=Yii::$app->errorHandler->error)
+	    if($error=Yii::$app->errorHandler->exception)
 	    {
+		echo $error->statusCode;exit;
+		var_dump($error);exit;
 	    	if(Yii::$app->request->isAjaxRequest)
 	    		echo $error['message'];
 	    	else
-	        	echo $this->render('error', $error);
+	        	return $this->render('error', $error);
 	    }
 	}
 
@@ -49,11 +52,11 @@ class SiteController extends Controller
 	public function actionContact()
 	{
 		$model = new ContactForm;
-		if ($this->populate($_POST, $model) && $model->contact(Yii::$app->params['adminEmail'])) {
+		if ($model->load($_POST) && $model->contact(Yii::$app->params['adminEmail'])) {
 			Yii::$app->session->setFlash('contact', 'Thank you for contacting us. We will respond to you as soon as possible.');
 			Yii::$app->response->refresh();
 		} else {
-			echo $this->render('contact', array(
+			return $this->render('contact', array(
 				'model' => $model,
 			));
 		}
@@ -65,10 +68,10 @@ class SiteController extends Controller
 	public function actionLogin()
 	{
 		$model = new LoginForm();
-		if ($this->populate($_POST, $model) && $model->login()) {
+		if ($model->load($_POST) && $model->login()) {
 			Yii::$app->response->redirect(Yii::$app->user->returnUrl);
 		} else {
-			echo $this->render('login', array(
+			return $this->render('login', array(
 				'model' => $model,
 			));
 		}

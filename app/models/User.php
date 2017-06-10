@@ -1,5 +1,7 @@
 <?php
 namespace app\models;
+
+use \Yii;
 use \yii\db\ActiveRecord;
 
 class User extends ActiveRecord
@@ -20,18 +22,6 @@ class User extends ActiveRecord
 			array('username, password, email', 'required'),
 			array('username, password, email', 'length', 'max'=>128),
 			//array('profile', 'safe'),
-		);
-	}
-
-	/**
-	 * @return array relational rules.
-	 */
-	public function relations()
-	{
-		// NOTE: you may need to adjust the relation name and the related
-		// class name for the relations automatically generated below.
-		return array(
-			'posts' => array(self::HAS_MANY, 'Post', 'author_id'),
 		);
 	}
 
@@ -85,7 +75,7 @@ class User extends ActiveRecord
 	protected function generateSalt($cost=10)
 	{
 		if(!is_numeric($cost)||$cost<4||$cost>31){
-			throw new CException(Yii::t('Cost parameter must be between 4 and 31.'));
+			throw new \yii\base\Exception(Yii::t('Cost parameter must be between 4 and 31.'));
 		}
 		// Get some pseudo-random data from mt_rand().
 		$rand='';

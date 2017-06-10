@@ -3,7 +3,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\widgets\Captcha;
 
-$this->title = 'Contact Us';
+$this->title = Yii::$app->name . ' - Contact Us';
 
 $this->params['breadcrumbs']=array(
     'Contact',
@@ -11,7 +11,7 @@ $this->params['breadcrumbs']=array(
 
 ?>
 
-<h1><?php echo Html::encode($this->title); ?></h1>
+<h1>Contact Us</h1>
 
 <?php if(Yii::$app->session->hasFlash('contact')): ?>
 <div class="alert alert-success">
@@ -24,7 +24,7 @@ $this->params['breadcrumbs']=array(
 If you have business inquiries or other questions, please fill out the following form to contact us. Thank you.
 </p>
 
-<?php $form=$this->beginWidget(ActiveForm::className(), array(
+<?php $form=ActiveForm::begin(array(
 	'options' => array('class' => 'form-horizontal'),
 	'fieldConfig' => array('inputOptions' => array('class' => 'input-xlarge')),
 )); ?>
@@ -33,19 +33,13 @@ If you have business inquiries or other questions, please fill out the following
 	<?php echo $form->field($model,'email')->textInput(); ?>
 	<?php echo $form->field($model,'subject')->textInput(array('size'=>60,'maxlength'=>128)); ?>
 	<?php echo $form->field($model,'body')->textArea(array('rows' => 6, 'cols'=>50)); ?>
-	<?php
-		$field = $form->field($model, 'verifyCode');
-		echo $field->begin();
-		echo $field->label();
-		$this->widget(Captcha::className());
-		echo Html::activeTextInput($model, 'verifyCode', array('class' => 'input-medium'));
-		echo $field->error();
-		echo $field->end();
-	?>
+	<?php echo $form->field($model, 'verifyCode')->widget(Captcha::className(), array(
+		'options' => array('class' => 'input-medium'),
+	)); ?>
 	<div class="form-actions">
 		<?php echo Html::submitButton('Submit', null, null, array('class' => 'btn btn-primary')); ?>
 	</div>
 
-<?php $this->endWidget(); ?>
+<?php ActiveForm::end(); ?>
 
 <?php endif; ?>

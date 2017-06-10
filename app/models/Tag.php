@@ -26,17 +26,6 @@ class Tag extends ActiveRecord
 	}
 
 	/**
-	 * @return array relational rules.
-	 */
-	public function relations()
-	{
-		// NOTE: you may need to adjust the relation name and the related
-		// class name for the relations automatically generated below.
-		return array(
-		);
-	}
-
-	/**
 	 * @return array customized attribute labels (name=>label)
 	 */
 	public function attributeLabels()
@@ -78,16 +67,12 @@ class Tag extends ActiveRecord
 	 * @param integer maximum number of tags to be returned
 	 * @return array list of matching tag names
 	 */
-	public function suggestTags($keyword,$limit=20)
+	public static function suggestTags($keyword,$limit=20)
 	{
-		$tags=$this->findAll(array(
-			'condition'=>'name LIKE :keyword',
-			'order'=>'frequency DESC, Name',
-			'limit'=>$limit,
-			'params'=>array(
-				':keyword'=>'%'.strtr($keyword,array('%'=>'\%', '_'=>'\_', '\\'=>'\\\\')).'%',
-			),
-		));
+		$tags =  static::find()->where(
+					array('like', 'name', '%'.strtr($keyword,array('%'=>'\%', '_'=>'\_', '\\'=>'\\\\')).'%')
+				)
+				->limit($limit)->orderBy('frequency DESC, Name')->all();
 		$names=array();
 		foreach($tags as $tag)
 			$names[]=$tag->name;
